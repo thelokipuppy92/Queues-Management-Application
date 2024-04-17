@@ -1,8 +1,10 @@
 package com.example.pt2024_group5_moga_diana_assignment2;
 
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Button;
@@ -39,9 +41,13 @@ public class Controller {
     @FXML
     private TextField maxServiceTimeField;
 
-    private SimulationManager simulationManager; // Inject SimulationManager
+    private SimulationManager simulationManager;
 
-    Logger logger;
+    @FXML
+    private TextArea simulatorTextArea;
+
+    @FXML
+    private ComboBox<String> strategyComboBox;
 
 
     @FXML
@@ -59,10 +65,14 @@ public class Controller {
         stage.show();
     }
 
+    public void initialize() {
+        strategyComboBox.getItems().addAll("SHORTEST_TIME_STRATEGY", "SHORTEST_QUEUE_STRATEGY");
+    }
+
+
     @FXML
     private void handleGenerateClientsButtonClick() {
         try {
-            // Get user input values from text fields
             int numClients = Integer.parseInt(numClientsField.getText());
             int minArrivalTime = Integer.parseInt(minArrivalTimeField.getText());
             int maxArrivalTime = Integer.parseInt(maxArrivalTimeField.getText());
@@ -81,6 +91,12 @@ public class Controller {
 
             simulationManager.setLogger(logger);
 
+            simulationManager.setSimulatorTextArea(simulatorTextArea);
+
+            // Strategy selection
+            SelectionPolicy policy = SelectionPolicy.valueOf(strategyComboBox.getValue());
+            simulationManager.getScheduler().changeStrategy(policy);
+
             List<Client> clients = simulationManager.getClients();
             for (Client client : clients) {
                 clientTextArea.appendText("Client ID: " + client.getId() + ", Arrival Time: " + client.getArrivalTime() + ", Service Time: " + client.getServiceTime() + "\n");
@@ -93,12 +109,21 @@ public class Controller {
 
         } catch (NumberFormatException e) {
             System.err.println("Error: Invalid input. Please enter numeric values in the text fields.");
+        } catch (IllegalArgumentException e) {
+            System.err.println("Error: Invalid selection policy.");
         }
     }
+
 
     public void setSimulationManager(SimulationManager simulationManager) {
         this.simulationManager = simulationManager;
     }
 
+    public void updateSimulatorTextArea(String event) {
+        Platform.runLater(() -> simulatorTextArea.appendText(event + "\n"));
+    }
+
+
 
 }
+

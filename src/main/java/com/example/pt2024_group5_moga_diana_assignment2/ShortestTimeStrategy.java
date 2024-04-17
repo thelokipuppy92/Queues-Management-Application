@@ -2,29 +2,21 @@ package com.example.pt2024_group5_moga_diana_assignment2;
 
 import java.util.List;
 
-public class ShortestQueueStrategy implements Strategy {
-
+public class ShortestTimeStrategy implements Strategy {
     @Override
     public Queue addClientToQueue(List<Queue> queues, Client client) {
-        // Find the first empty queue
-        for (Queue queue : queues) {
-            if (queue.isEmpty()) {
-                queue.addClient(client);
-                return queue;
-            }
-        }
-        // If all queues are occupied, find the queue with the fewest clients
         Queue shortestQueue = null;
-        int minQueueSize = Integer.MAX_VALUE;
+        int minServiceTime = Integer.MAX_VALUE;
 
         for (Queue queue : queues) {
-            int queueSize = queue.getSize();
-            if (queueSize < minQueueSize) {
+            // Get the service time of the client in the queue
+            int serviceTime = queue.getServiceTimeBeforeClient(client);
+            // If the service time in the queue is less than the minimum so far, update the shortest queue
+            if (serviceTime < minServiceTime) {
                 shortestQueue = queue;
-                minQueueSize = queueSize;
+                minServiceTime = serviceTime;
             }
         }
-
         if (shortestQueue != null) {
             shortestQueue.addClient(client);
             return shortestQueue;
@@ -33,6 +25,5 @@ public class ShortestQueueStrategy implements Strategy {
             return null;
         }
     }
-
 }
 

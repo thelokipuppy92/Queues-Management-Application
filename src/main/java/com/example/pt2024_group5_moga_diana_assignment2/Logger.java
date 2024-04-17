@@ -1,6 +1,7 @@
 package com.example.pt2024_group5_moga_diana_assignment2;
 import java.io.*;
 
+
 public class Logger {
     private StringBuilder log;
 

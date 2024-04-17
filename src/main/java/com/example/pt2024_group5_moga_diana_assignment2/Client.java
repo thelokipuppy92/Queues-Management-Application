@@ -4,11 +4,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+
 public class Client {
     int id;
     int arrivalTime;
     int serviceTime;
     int initialServiceTime;
+    private boolean beingServed;
 
     private boolean hasBeenInQueue;
 
@@ -17,8 +19,9 @@ public class Client {
         this.id = id;
         this.arrivalTime = arrivalTime;
         this.serviceTime = serviceTime;
-        this.initialServiceTime =serviceTime;
-        this.hasBeenInQueue=false;
+        this.initialServiceTime = serviceTime;
+        this.beingServed = false;
+        this.hasBeenInQueue = false;
     }
 
     // Getters
@@ -57,29 +60,5 @@ public class Client {
         return clients;
     }
 
-
-    public void setInitialServiceTime() {
-        this.serviceTime = initialServiceTime; // Reset service time to initial value
-    }
-
-    public int getInitialServiceTime() {
-        return initialServiceTime;
-    }
-
-    public boolean hasDecrementedServiceTime() {
-        return serviceTime < initialServiceTime;
-    }
-
-    public int getMaxServiceTime() {
-        return initialServiceTime;
-    }
-
-    public boolean hasBeenInQueue() {
-        return hasBeenInQueue;
-    }
-
-    public void setHasBeenInQueue(boolean hasBeenInQueue) {
-        this.hasBeenInQueue = hasBeenInQueue;
-    }
 
 }
